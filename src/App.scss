@@ -1,0 +1,24 @@
+/*====================*/
+//  General Settings  //
+/*====================*/
+
+body {
+  margin: 3rem auto;
+  max-width: 960px;
+  color: #101820;
+  background-color: #fdfdfd;
+  font-smooth: always;
+  -webkit-font-smoothing: antialised;
+  -moz-osx-font-smoothing: grayscale;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: "Foundersgroteskweb", sans-serif;
+  }
+  p {
+    font-family: "Open-Sans", sans-serif;
+  }
+}
