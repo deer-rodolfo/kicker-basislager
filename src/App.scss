@@ -1,15 +1,36 @@
 /*====================*/
+/////  Variables   /////
+/*====================*/
+
+$basislager-green: #26d07c;
+$basislager-background: #fff;
+
+/*====================*/
+/////    Mixins    /////
+/*====================*/
+
+@mixin btn() {
+  box-shadow: 1px 1px 3px 0 #bbb;
+  margin: 0 1rem !important;
+  &:hover {
+    background-image: linear-gradient(150deg, #2483c5, #26d07c);
+  }
+}
+
+@mixin mq($from) {
+  @media (max-width: $from) {
+    @content;
+  }
+}
+
+/*====================*/
 //  General Settings  //
 /*====================*/
 
 body {
-  margin: 3rem auto;
-  max-width: 960px;
+  margin: 0;
   color: #101820;
   background-color: #fdfdfd;
-  font-smooth: always;
-  -webkit-font-smoothing: antialised;
-  -moz-osx-font-smoothing: grayscale;
 
   h1,
   h2,
@@ -18,7 +39,76 @@ body {
   h5 {
     font-family: "Foundersgroteskweb", sans-serif;
   }
-  p {
-    font-family: "Open-Sans", sans-serif;
+}
+
+button {
+  @include btn();
+}
+
+/*====================*/
+//////   Header   //////
+/*====================*/
+
+header {
+  border-bottom: solid 2px $basislager-green;
+  margin-bottom: 100px;
+
+  .header-nav {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 4fr 1fr 1fr;
+    max-width: 960px;
+    margin: auto;
+    height: 80px;
+    @include mq("450px") {
+      grid-template-columns: 1fr 1fr;
+      justify-items: center;
+    }
+    a,
+    img {
+      max-height: 70px;
+      @include mq("450px") {
+        display: none;
+      }
+    }
+  }
+}
+
+/*====================*/
+////// Add Player/Game //////
+/*====================*/
+.add-game,
+.add-player {
+  &__modal {
+    padding: 1rem 2rem;
+    margin: 15vh auto;
+    max-width: 500px;
+    background-color: white;
+    border: 2px solid $basislager-green;
+    box-shadow: 1px 1px 3px 0 #bbb;
+    text-align: center;
+  }
+}
+
+/*====================*/
+////  LeaderBoard   ////
+/*====================*/
+.leaderboard {
+  th {
+    background: $basislager-green;
+    color: #fdfdfd;
+    text-transform: uppercase;
+  }
+  tr {
+    &:nth-child(even) {
+      background-color: #f6f6f6;
+    }
+    &:hover {
+      background: #eee;
+
+      td {
+        color: #101820;
+      }
+    }
   }
 }

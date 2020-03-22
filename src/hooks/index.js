@@ -11,13 +11,15 @@ export const usePlayers = () => {
       .get()
       .then(snapshot => {
         const allPlayers = snapshot.docs.map(player => ({
+          id: player.id,
           games: player.data().wins + player.data().loses,
           ...player.data()
         }));
         if (JSON.stringify(allPlayers) !== JSON.stringify(players)) {
           setPlayers(allPlayers);
         }
-      });
+      })
+      .catch(error => console.log(error));
   }, [players]);
 
   return { players, setPlayers };
