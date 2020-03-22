@@ -10,6 +10,8 @@ export const AddGame: FunctionComponent<{}> = () => {
   const [winningTeam, setWinningTeam] = useState<playerInterface[]>([]);
   const [losingTeam, setLosingTeam] = useState<playerInterface[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
+  const email: any = process.env.REACT_APP_EMAIL;
 
   const autoCompleteStyle = {
     width: "100%",
@@ -39,11 +41,17 @@ export const AddGame: FunctionComponent<{}> = () => {
   };
 
   const addGame = () => {
-    winningTeam.map(player => addWin(player));
-    losingTeam.map(player => addLoss(player));
-    setWinningTeam([]);
-    setLosingTeam([]);
-    setModalIsOpen(false);
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        winningTeam.map(player => addWin(player));
+        losingTeam.map(player => addLoss(player));
+        setPassword("");
+        setWinningTeam([]);
+        setLosingTeam([]);
+        setModalIsOpen(false);
+      });
   };
 
   return (
@@ -94,6 +102,16 @@ export const AddGame: FunctionComponent<{}> = () => {
             renderInput={params => (
               <TextField {...params} label="Player" variant="outlined" />
             )}
+          />
+          <TextField
+            id="outlined-basic"
+            label="password"
+            variant="outlined"
+            type="password"
+            data-testid="add-player-password"
+            style={autoCompleteStyle}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
           />
           <Button
             variant="contained"
