@@ -1,4 +1,4 @@
-![basislager logo](./src/assets/basislager-logo.png)
+![basislager logo](./basis-logo.png)
 
 ## Basislager Kicker
 
