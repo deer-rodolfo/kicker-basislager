@@ -105,7 +105,7 @@ export const AddGame: FunctionComponent<{}> = () => {
           />
           <TextField
             id="outlined-basic"
-            label="password"
+            label="code"
             variant="outlined"
             type="password"
             data-testid="add-player-password"

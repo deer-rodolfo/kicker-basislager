@@ -16,7 +16,7 @@ export const LeaderBoard: FunctionComponent<{}> = () => {
   const { players }: any = usePlayersValue();
 
   const playerPoints = (player: playerInterface): number => {
-    return Math.floor(player.wins * 2 - player.loses);
+    return Math.floor(player.wins * 3 - player.loses * 2);
   };
 
   const winRatio = (player: playerInterface): number => {
