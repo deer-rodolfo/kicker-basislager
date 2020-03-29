@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Button, Modal, TextField } from "@material-ui/core";
+import { Button, Modal, TextField, CircularProgress } from "@material-ui/core";
 import { playerInterface } from "../helpers";
 import { usePlayersValue } from "../context";
 import { firebase } from "../firebase";
@@ -11,6 +11,7 @@ export const AddGame: FunctionComponent<{}> = () => {
   const [losingTeam, setLosingTeam] = useState<playerInterface[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const email: any = process.env.REACT_APP_EMAIL;
 
   const autoCompleteStyle = {
@@ -41,6 +42,7 @@ export const AddGame: FunctionComponent<{}> = () => {
   };
 
   const addGame = () => {
+    setLoading(true);
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -50,6 +52,7 @@ export const AddGame: FunctionComponent<{}> = () => {
         setPassword("");
         setWinningTeam([]);
         setLosingTeam([]);
+        setLoading(false);
         setModalIsOpen(false);
       });
   };
@@ -120,7 +123,11 @@ export const AddGame: FunctionComponent<{}> = () => {
             onClick={() => addGame()}
             data-testid="add-game-submit"
           >
-            Add Game
+            {loading ? (
+              <CircularProgress size={24} color="secondary" />
+            ) : (
+              "Add Game"
+            )}
           </Button>
         </div>
       </Modal>

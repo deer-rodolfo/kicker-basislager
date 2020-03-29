@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Modal, TextField } from "@material-ui/core";
+import { Button, Modal, TextField, CircularProgress } from "@material-ui/core";
 import { playerInterface } from "../helpers";
 import { usePlayersValue } from "../context";
 import { firebase } from "../firebase";
@@ -9,6 +9,7 @@ export const AddPlayer: FunctionComponent<{}> = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const email: any = process.env.REACT_APP_EMAIL;
 
   const textInputStyle = {
@@ -22,6 +23,7 @@ export const AddPlayer: FunctionComponent<{}> = () => {
       : true;
   };
   const addPlayer = () => {
+    setLoading(true);
     if (userName && userNameUnique(userName)) {
       firebase
         .auth()
@@ -36,6 +38,7 @@ export const AddPlayer: FunctionComponent<{}> = () => {
               loses: 0
             })
             .then(() => {
+              setLoading(false);
               setUserName("");
               setPassword("");
               setPlayers([...players]);
@@ -92,7 +95,11 @@ export const AddPlayer: FunctionComponent<{}> = () => {
             onClick={() => addPlayer()}
             data-testid="add-player-submit"
           >
-            Add Player
+            {loading ? (
+              <CircularProgress size={24} color="secondary" />
+            ) : (
+              "Add Player"
+            )}
           </Button>
         </div>
       </Modal>
