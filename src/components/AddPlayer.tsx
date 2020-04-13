@@ -23,9 +23,9 @@ export const AddPlayer: FunctionComponent<{}> = () => {
       : true;
   };
   const addPlayer = () => {
-    setLoading(true);
     console.log(codeAccepted);
     if (userName && codeAccepted && userNameUnique(userName)) {
+      setLoading(true);
       firebase
         .firestore()
         .collection("players")
@@ -40,8 +40,6 @@ export const AddPlayer: FunctionComponent<{}> = () => {
           setPlayers([...players]);
           setModalIsOpen(false);
         });
-    } else {
-      setLoading(false);
     }
   };
 

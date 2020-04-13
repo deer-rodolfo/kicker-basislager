@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { CodeField } from "./CodeField";
 import { Button, Modal, TextField, CircularProgress } from "@material-ui/core";
 import { playerInterface } from "../helpers";
 import { usePlayersValue } from "../context";
@@ -10,51 +11,48 @@ export const AddGame: FunctionComponent<{}> = () => {
   const [winningTeam, setWinningTeam] = useState<playerInterface[]>([]);
   const [losingTeam, setLosingTeam] = useState<playerInterface[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const email: any = process.env.REACT_APP_EMAIL;
+  const [codeAccepted, setCodeAccepted] = useState<boolean>(false);
 
   const autoCompleteStyle = {
     width: "100%",
-    margin: "1rem auto"
+    margin: "1rem auto",
   };
 
-  const addWin = (player: playerInterface) => {
-    firebase
-      .firestore()
-      .collection("players")
-      .doc(player.id)
-      .update({
-        wins: player.wins + 1
-      })
-      .then(() => setPlayers([...players]));
-  };
-
-  const addLoss = (player: playerInterface) => {
-    firebase
-      .firestore()
-      .collection("players")
-      .doc(player.id)
-      .update({
-        loses: player.loses + 1
-      })
-      .then(() => setPlayers([...players]));
+  const updatePlayer = (
+    batch: any,
+    db: any,
+    player: playerInterface,
+    win: boolean
+  ) => {
+    const playerRef = db.collection("players").doc(player.id);
+    batch.update(
+      playerRef,
+      win
+        ? {
+            wins: player.wins + 1,
+          }
+        : {
+            loses: player.loses + 1,
+          }
+    );
   };
 
   const addGame = () => {
-    setLoading(true);
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        winningTeam.map(player => addWin(player));
-        losingTeam.map(player => addLoss(player));
-        setPassword("");
+    if (codeAccepted) {
+      setLoading(true);
+      const db = firebase.firestore();
+      const batch = db.batch();
+      winningTeam.map((player) => updatePlayer(batch, db, player, true));
+      losingTeam.map((player) => updatePlayer(batch, db, player, false));
+      batch.commit().then(() => {
         setWinningTeam([]);
         setLosingTeam([]);
+        setPlayers([...players]);
         setLoading(false);
         setModalIsOpen(false);
       });
+    }
   };
 
   return (
@@ -87,7 +85,7 @@ export const AddGame: FunctionComponent<{}> = () => {
             onChange={(e, selectedTeam) => setWinningTeam(selectedTeam)}
             getOptionLabel={(option: playerInterface) => option.name}
             style={autoCompleteStyle}
-            renderInput={params => (
+            renderInput={(params) => (
               <TextField {...params} label="Player" variant="outlined" />
             )}
           />
@@ -102,19 +100,13 @@ export const AddGame: FunctionComponent<{}> = () => {
             onChange={(e, selectedTeam) => setLosingTeam(selectedTeam)}
             getOptionLabel={(option: playerInterface) => option.name}
             style={autoCompleteStyle}
-            renderInput={params => (
+            renderInput={(params) => (
               <TextField {...params} label="Player" variant="outlined" />
             )}
           />
-          <TextField
-            id="outlined-basic"
-            label="code"
-            variant="outlined"
-            type="password"
-            data-testid="add-player-password"
-            style={autoCompleteStyle}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+          <CodeField
+            inputStyle={autoCompleteStyle}
+            setCodeAccepted={setCodeAccepted}
           />
           <Button
             variant="contained"
