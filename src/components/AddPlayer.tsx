@@ -23,7 +23,6 @@ export const AddPlayer: FunctionComponent<{}> = () => {
       : true;
   };
   const addPlayer = () => {
-    console.log(codeAccepted);
     if (userName && codeAccepted && userNameUnique(userName)) {
       setLoading(true);
       firebase
