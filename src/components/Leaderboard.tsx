@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Container
+  Container,
 } from "@material-ui/core";
 import { usePlayersValue } from "../context";
 import { playerInterface } from "../helpers";
@@ -20,7 +20,7 @@ export const Leaderboard: FunctionComponent<{}> = () => {
   };
 
   const winRatio = (player: playerInterface): number => {
-    return Math.floor((player.wins / player.games) * 100);
+    return player.games ? Math.floor((player.wins / player.games) * 100) : 0;
   };
 
   const sortCompare = (a: playerInterface, b: playerInterface): number => {
