@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Header } from "./components/layout/Header";
-import { LeaderBoard } from "./components/Leaderboard";
+import { Leaderboard } from "./components/Leaderboard";
 import { PlayersProvider } from "./context";
 import "./App.scss";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
@@ -28,7 +28,7 @@ const App: FunctionComponent<{}> = () => {
     <PlayersProvider>
       <ThemeProvider theme={theme}>
         <Header />
-        <LeaderBoard />
+        <Leaderboard />
       </ThemeProvider>
     </PlayersProvider>
   );

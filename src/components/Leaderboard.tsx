@@ -12,7 +12,7 @@ import {
 import { usePlayersValue } from "../context";
 import { playerInterface } from "../helpers";
 
-export const LeaderBoard: FunctionComponent<{}> = () => {
+export const Leaderboard: FunctionComponent<{}> = () => {
   const { players }: any = usePlayersValue();
 
   const playerPoints = (player: playerInterface): number => {
@@ -41,7 +41,7 @@ export const LeaderBoard: FunctionComponent<{}> = () => {
 
   return (
     <Container max-width="md">
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} data-testid="leaderboard">
         <Table aria-label="leaderboard" className="leaderboard">
           <TableHead>
             <TableRow>
