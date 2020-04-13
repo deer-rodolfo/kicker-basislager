@@ -8,8 +8,7 @@
       "REACT_APP_STORAGE_BUCKET": "@storage_bucket",
       "REACT_APP_MESSAGING_SENDER_ID": "@sender_id",
       "REACT_APP_ID": "@app_id",
-      "REACT_APP_CODE": "@kicker_code",
-      "REACT_APP_EMAIL": "@email"
+      "REACT_APP_CODE": "@kicker-code"
     }
   }
 }
