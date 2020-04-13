@@ -2,19 +2,19 @@ import React, { FunctionComponent, useState } from "react";
 import { Button, Modal, TextField, CircularProgress } from "@material-ui/core";
 import { playerInterface } from "../helpers";
 import { usePlayersValue } from "../context";
+import { CodeField } from "./CodeField";
 import { firebase } from "../firebase";
 
 export const AddPlayer: FunctionComponent<{}> = () => {
   const { players, setPlayers }: any = usePlayersValue();
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [codeAccepted, setCodeAccepted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const email: any = process.env.REACT_APP_EMAIL;
 
   const textInputStyle = {
     width: "100%",
-    margin: "1rem auto"
+    margin: "1rem auto",
   };
 
   const userNameUnique = (username: string): boolean => {
@@ -24,28 +24,24 @@ export const AddPlayer: FunctionComponent<{}> = () => {
   };
   const addPlayer = () => {
     setLoading(true);
-    if (userName && userNameUnique(userName)) {
+    console.log(codeAccepted);
+    if (userName && codeAccepted && userNameUnique(userName)) {
       firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
+        .firestore()
+        .collection("players")
+        .add({
+          name: userName,
+          wins: 0,
+          loses: 0,
+        })
         .then(() => {
-          firebase
-            .firestore()
-            .collection("players")
-            .add({
-              name: userName,
-              wins: 0,
-              loses: 0
-            })
-            .then(() => {
-              setLoading(false);
-              setUserName("");
-              setPassword("");
-              setPlayers([...players]);
-              setModalIsOpen(false);
-              firebase.auth().signOut();
-            });
+          setUserName("");
+          setCodeAccepted(false);
+          setPlayers([...players]);
+          setModalIsOpen(false);
         });
+    } else {
+      setLoading(false);
     }
   };
 
@@ -75,17 +71,11 @@ export const AddPlayer: FunctionComponent<{}> = () => {
             data-testid="add-player-username"
             style={textInputStyle}
             value={userName}
-            onChange={e => setUserName(e.target.value)}
+            onChange={(e) => setUserName(e.target.value)}
           />
-          <TextField
-            id="outlined-basic"
-            label="code"
-            variant="outlined"
-            type="password"
-            data-testid="add-player-password"
-            style={textInputStyle}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+          <CodeField
+            inputStyle={textInputStyle}
+            setCodeAccepted={setCodeAccepted}
           />
           <Button
             className="add-player__submit-btn"
