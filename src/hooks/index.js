@@ -29,8 +29,8 @@ export const usePlayers = () => {
         if (JSON.stringify(allPlayers) !== JSON.stringify(players)) {
           setPlayers(allPlayers);
         }
-      })
-      .catch((error) => console.log(error));
+      });
+    //.catch((error) => console.log(error));
   }, [players]);
 
   return { players, setPlayers };
