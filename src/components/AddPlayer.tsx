@@ -20,14 +20,19 @@ export const AddPlayer: FunctionComponent<{}> = () => {
   };
 
   const userNameUnique = (username: string): boolean => {
-    return players.find((player: playerInterface) => player.name === username)
+    return players.find(
+      (player: playerInterface) =>
+        player.name.toLowerCase() === username.toLowerCase()
+    )
       ? false
       : true;
   };
   const addPlayer = () => {
-    userName ? setNameError(false) : setNameError(true);
+    userName && userNameUnique(userName)
+      ? setNameError(false)
+      : setNameError(true);
     codeAccepted ? setCodeError(false) : setCodeError(true);
-    if (!nameError && codeAccepted && userNameUnique(userName)) {
+    if (!nameError && codeAccepted) {
       setLoading(true);
       firebase
         .firestore()
@@ -42,6 +47,7 @@ export const AddPlayer: FunctionComponent<{}> = () => {
           setCodeAccepted(false);
           setPlayers([...players]);
           setModalIsOpen(false);
+          setLoading(false);
         });
     }
   };
