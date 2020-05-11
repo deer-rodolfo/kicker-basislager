@@ -4,66 +4,51 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
   Container,
 } from "@material-ui/core";
 import { usePlayersValue } from "../context";
-import { playerInterface } from "../helpers";
+import { playerInterface, Order, stableSort, getComparator } from "../helpers";
+import { LeaderboardHead } from "./LeaderboardHead";
 
 export const Leaderboard: FunctionComponent<{}> = () => {
   const { players }: any = usePlayersValue();
+  const [orderBy, setOrderBy] = React.useState<keyof playerInterface>("points");
+  const [order, setOrder] = React.useState<Order>("desc");
 
-  const playerPoints = (player: playerInterface): number => {
-    return Math.floor(player.wins * 3 - player.loses * 2);
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: keyof playerInterface
+  ) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
   };
-
-  const winRatio = (player: playerInterface): number => {
-    return player.games ? Math.floor((player.wins / player.games) * 100) : 0;
-  };
-
-  const sortCompare = (a: playerInterface, b: playerInterface): number => {
-    const pointsA = playerPoints(a);
-    const pointsB = playerPoints(b);
-
-    let comparison = 0;
-    if (pointsA > pointsB) {
-      comparison = -1;
-    } else if (pointsA < pointsB) {
-      comparison = 1;
-    }
-    return comparison;
-  };
-
-  const sortedPlayers = [...players];
-  sortedPlayers.sort(sortCompare);
 
   return (
     <Container max-width="md">
       <TableContainer component={Paper} data-testid="leaderboard">
         <Table aria-label="leaderboard" className="leaderboard">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Username</TableCell>
-              <TableCell align="center">Games</TableCell>
-              <TableCell align="center">Wins</TableCell>
-              <TableCell align="center">Win-Ratio</TableCell>
-              <TableCell align="center">Points</TableCell>
-            </TableRow>
-          </TableHead>
+          <LeaderboardHead
+            orderBy={orderBy}
+            order={order}
+            onRequestSort={handleRequestSort}
+          />
           <TableBody>
-            {sortedPlayers.map((player: playerInterface) => (
-              <TableRow key={player.id}>
-                <TableCell align="center" scope="row">
-                  {player.name}
-                </TableCell>
-                <TableCell align="center">{player.games}</TableCell>
-                <TableCell align="center">{player.wins}</TableCell>
-                <TableCell align="center">{winRatio(player)}%</TableCell>
-                <TableCell align="center">{playerPoints(player)}</TableCell>
-              </TableRow>
-            ))}
+            {stableSort(players, getComparator(order, orderBy)).map(
+              (player, index) => (
+                <TableRow hover key={player.id}>
+                  <TableCell align="center" scope="row">
+                    {player.name}
+                  </TableCell>
+                  <TableCell align="center">{player.games}</TableCell>
+                  <TableCell align="center">{player.wins}</TableCell>
+                  <TableCell align="center">{player.winRatio}%</TableCell>
+                  <TableCell align="center">{player.points}</TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
