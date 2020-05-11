@@ -13,10 +13,21 @@ export const AddGame: FunctionComponent<{}> = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [codeAccepted, setCodeAccepted] = useState<boolean>(false);
+  const [codeError, setCodeError] = useState<boolean>(false);
+  const [winError, setWinError] = useState<boolean>(false);
+  const [lossError, setLossError] = useState<boolean>(false);
 
   const autoCompleteStyle = {
     width: "100%",
     margin: "1rem auto",
+  };
+
+  const filterPlayers = (options: playerInterface[]) => {
+    const filteredPlayers = players.filter(
+      (player: playerInterface) =>
+        !(winningTeam.includes(player) || losingTeam.includes(player))
+    );
+    return filteredPlayers;
   };
 
   const updatePlayer = (
@@ -39,7 +50,9 @@ export const AddGame: FunctionComponent<{}> = () => {
   };
 
   const addGame = () => {
-    if (codeAccepted) {
+    winningTeam ? setWinError(false) : setWinError(true);
+    losingTeam ? setLossError(false) : setLossError(true);
+    if (codeAccepted && !winError && !lossError) {
       setLoading(true);
       const db = firebase.firestore();
       const batch = db.batch();
@@ -52,6 +65,8 @@ export const AddGame: FunctionComponent<{}> = () => {
         setLoading(false);
         setModalIsOpen(false);
       });
+    } else {
+      setCodeError(true);
     }
   };
 
@@ -79,7 +94,7 @@ export const AddGame: FunctionComponent<{}> = () => {
             id="winner-team"
             freeSolo
             multiple
-            filterSelectedOptions
+            filterOptions={(options, state) => filterPlayers(options)}
             options={players}
             value={winningTeam}
             onChange={(e, selectedTeam) => setWinningTeam(selectedTeam)}
@@ -94,7 +109,7 @@ export const AddGame: FunctionComponent<{}> = () => {
             id="loser-team"
             freeSolo
             multiple
-            filterSelectedOptions
+            filterOptions={(options, state) => filterPlayers(options)}
             options={players}
             value={losingTeam}
             onChange={(e, selectedTeam) => setLosingTeam(selectedTeam)}
@@ -107,6 +122,8 @@ export const AddGame: FunctionComponent<{}> = () => {
           <CodeField
             inputStyle={autoCompleteStyle}
             setCodeAccepted={setCodeAccepted}
+            codeError={codeError}
+            setCodeError={setCodeError}
           />
           <Button
             variant="contained"
