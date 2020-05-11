@@ -7,7 +7,7 @@ const playerPoints = (wins, loses) => {
 
 const winRatio = (wins, loses) => {
   const games = wins + loses;
-  return games ? Math.floor((wins / loses) * 100) : 0;
+  return games ? Math.floor((wins / games) * 100) : 0;
 };
 
 export const usePlayers = () => {
