@@ -1,3 +1,8 @@
+//Theme
+import { Theme } from "./Theme";
+
+export { Theme as theme };
+
 // types and interfaces
 export interface playerInterface {
   id: string;
