@@ -11,6 +11,8 @@ export const AddPlayer: FunctionComponent<{}> = () => {
   const [userName, setUserName] = useState<string>("");
   const [codeAccepted, setCodeAccepted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [codeError, setCodeError] = useState<boolean>(false);
 
   const textInputStyle = {
     width: "100%",
@@ -23,7 +25,9 @@ export const AddPlayer: FunctionComponent<{}> = () => {
       : true;
   };
   const addPlayer = () => {
-    if (userName && codeAccepted && userNameUnique(userName)) {
+    userName ? setNameError(false) : setNameError(true);
+    codeAccepted ? setCodeError(false) : setCodeError(true);
+    if (!nameError && codeAccepted && userNameUnique(userName)) {
       setLoading(true);
       firebase
         .firestore()
@@ -66,12 +70,16 @@ export const AddPlayer: FunctionComponent<{}> = () => {
             label="Username"
             variant="outlined"
             data-testid="add-player-username"
+            error={nameError}
+            helperText={nameError ? "You need a cool name!" : ""}
             style={textInputStyle}
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
           />
           <CodeField
             inputStyle={textInputStyle}
+            codeError={codeError}
+            setCodeError={setCodeError}
             setCodeAccepted={setCodeAccepted}
           />
           <Button
