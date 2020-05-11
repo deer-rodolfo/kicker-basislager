@@ -1,7 +1,15 @@
 import React, { FunctionComponent, useState } from "react";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Autocomplete, Alert } from "@material-ui/lab";
 import { CodeField } from "./CodeField";
-import { Button, Modal, TextField, CircularProgress } from "@material-ui/core";
+import {
+  Button,
+  Modal,
+  TextField,
+  CircularProgress,
+  Collapse,
+  IconButton,
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import { playerInterface } from "../helpers";
 import { usePlayersValue } from "../context";
 import { firebase } from "../firebase";
@@ -14,8 +22,7 @@ export const AddGame: FunctionComponent<{}> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [codeAccepted, setCodeAccepted] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
-  const [winError, setWinError] = useState<boolean>(false);
-  const [lossError, setLossError] = useState<boolean>(false);
+  const [teamError, setTeamError] = useState<boolean>(false);
 
   const autoCompleteStyle = {
     width: "100%",
@@ -50,9 +57,10 @@ export const AddGame: FunctionComponent<{}> = () => {
   };
 
   const addGame = () => {
-    winningTeam ? setWinError(false) : setWinError(true);
-    losingTeam ? setLossError(false) : setLossError(true);
-    if (codeAccepted && !winError && !lossError) {
+    winningTeam.length > 0 && losingTeam.length > 0
+      ? setTeamError(false)
+      : setTeamError(true);
+    if (codeAccepted && !teamError) {
       setLoading(true);
       const db = firebase.firestore();
       const batch = db.batch();
@@ -89,6 +97,25 @@ export const AddGame: FunctionComponent<{}> = () => {
       >
         <div className="add-game__modal">
           <h2>Add New Game</h2>
+          <Collapse in={teamError}>
+            <Alert
+              severity="warning"
+              action={
+                <IconButton
+                  aria-label="close"
+                  size="small"
+                  className="alert-btn"
+                  onClick={() => {
+                    setTeamError(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+            >
+              Every team should have at least one player.
+            </Alert>
+          </Collapse>
           <h3>Winners</h3>
           <Autocomplete
             id="winner-team"

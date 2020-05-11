@@ -14,6 +14,7 @@ $basislager-background: #fff;
   margin: 0 1rem !important;
   &:hover {
     background-image: linear-gradient(150deg, #2483c5, #26d07c);
+    color: #fdfdfd;
   }
 }
 
@@ -77,6 +78,7 @@ header {
 /*====================*/
 ////// Add Player/Game //////
 /*====================*/
+
 .add-game,
 .add-player {
   &__modal {
