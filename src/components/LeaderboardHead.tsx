@@ -41,7 +41,7 @@ export function LeaderboardHead(props: LeaderboardHeadProps) {
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <TableCell align="center">
+          <TableCell key={headCell.id} align="center">
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
