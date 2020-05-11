@@ -19,23 +19,16 @@ interface LeaderboardHeadProps {
 export function LeaderboardHead(props: LeaderboardHeadProps) {
   const { order, orderBy, onRequestSort } = props;
   interface HeadCell {
-    disablePadding: boolean;
     id: keyof playerInterface;
     label: string;
-    numeric: boolean;
   }
 
   const headCells: HeadCell[] = [
-    { id: "name", numeric: false, disablePadding: true, label: "Username" },
-    { id: "games", numeric: true, disablePadding: false, label: "Games" },
-    { id: "wins", numeric: true, disablePadding: false, label: "Wins" },
-    {
-      id: "winRatio",
-      numeric: false,
-      disablePadding: false,
-      label: "Win-Ratio",
-    },
-    { id: "points", numeric: false, disablePadding: false, label: "Points" },
+    { id: "name", label: "Username" },
+    { id: "games", label: "Games" },
+    { id: "wins", label: "Wins" },
+    { id: "winRatio", label: "Win-Ratio" },
+    { id: "points", label: "Points" },
   ];
 
   const createSortHandler = (property: keyof playerInterface) => (
