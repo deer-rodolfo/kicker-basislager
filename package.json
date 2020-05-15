@@ -1,7 +1,6 @@
 {
   "name": "kicker-basislager",
   "version": "0.2.0",
-  "homepage": ".",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.7",
@@ -54,7 +53,8 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "IE 8"
     ],
     "development": [
       "last 1 chrome version",

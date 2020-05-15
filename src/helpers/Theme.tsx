@@ -4,7 +4,7 @@ const mainWhite = "#fdfdfd";
 export const Theme = createMuiTheme({
   typography: {
     fontFamily: ["Open-Sans", "sans-serif"].join(","),
-    fontSize: 15,
+    fontSize: 18,
     fontWeightLight: 500,
   },
   palette: {
