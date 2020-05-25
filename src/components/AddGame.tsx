@@ -29,10 +29,11 @@ export const AddGame: FunctionComponent<{}> = () => {
     margin: "1rem auto",
   };
 
-  const filterPlayers = (options: playerInterface[]) => {
+  const filterPlayers = (options: playerInterface[], search:string) => {
+    search = search.toLowerCase()
     const filteredPlayers = players.filter(
       (player: playerInterface) =>
-        !(winningTeam.includes(player) || losingTeam.includes(player))
+        (!(winningTeam.includes(player) || losingTeam.includes(player)) ) && player.name.toLowerCase().indexOf(search) > -1
     );
     return filteredPlayers;
   };
@@ -121,7 +122,7 @@ export const AddGame: FunctionComponent<{}> = () => {
             id="winner-team"
             freeSolo
             multiple
-            filterOptions={(options, state) => filterPlayers(options)}
+            filterOptions={(options, state) => filterPlayers(options, state.inputValue)}
             options={players}
             value={winningTeam}
             onChange={(e, selectedTeam) => setWinningTeam(selectedTeam)}
@@ -136,7 +137,7 @@ export const AddGame: FunctionComponent<{}> = () => {
             id="loser-team"
             freeSolo
             multiple
-            filterOptions={(options, state) => filterPlayers(options)}
+            filterOptions={(options, state) => filterPlayers(options,state.inputValue)}
             options={players}
             value={losingTeam}
             onChange={(e, selectedTeam) => setLosingTeam(selectedTeam)}
