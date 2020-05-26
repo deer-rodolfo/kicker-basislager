@@ -2,7 +2,6 @@
   "name": "kicker-basislager",
   "version": "0.2.0",
   "private": true,
-  "homepage": "https://deer-rodolfo.github.io/kicker-basislager/",
   "dependencies": {
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
