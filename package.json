@@ -16,6 +16,7 @@
     "firebase": "^7.8.2",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
+    "react-app-polyfill": "^1.0.6",
     "react-dom": "^16.12.0",
     "react-scripts": "^3.4.1",
     "typescript": "^3.8.3"
@@ -54,7 +55,7 @@
       ">0.2%",
       "not dead",
       "not op_mini all",
-      "IE 8"
+      "ie >= 9"
     ],
     "development": [
       "last 1 chrome version",
